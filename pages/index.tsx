@@ -67,15 +67,15 @@ export default function Home() {
   const handleLoginWithGoogle = useCallback(async (res: CredentialResponse) => {
     const googleToken = res.credential;
 
+    console.log("google credential for user --->", googleToken);
+
     if (!googleToken) return toast.error('Failed to login with google')
 
-    const {verifyGoogleToken} = await
-      graphqlClient.request(
+    const {verifyGoogleToken} = await graphqlClient.request(
         verifyUserGoogleTokenQuery,
         { token: googleToken }
       )
-    console.log(verifyGoogleToken)
-
+      
     toast.success('Successfully logged in with google')
 
     if(verifyGoogleToken) window.localStorage.setItem("__twitter_token",verifyGoogleToken)
