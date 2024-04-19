@@ -1,7 +1,7 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import Image from 'next/image'
 import { BsBookmark, BsPeopleFill, BsPerson } from "react-icons/bs"
-import { BiSolidHomeCircle, BiMessageDetail } from "react-icons/bi"
+import { BiSolidHomeCircle, BiMessageDetail, BiImageAlt } from "react-icons/bi"
 import { RiNotification4Line, RiTwitterXLine } from "react-icons/ri"
 import { AiOutlineSearch } from "react-icons/ai"
 import { HiMiniQueueList } from "react-icons/hi2"
@@ -12,7 +12,9 @@ import { graphqlClient } from '@/clients/apis'
 import { verifyUserGoogleTokenQuery } from '@/graphql/query/user'
 import { useCurrentUser } from "@/hooks/user"
 import { useQueryClient } from "@tanstack/react-query"
-// import FeedCard from '@/components/FeedCard'
+import FeedCard from '../components/FeedCard'
+import { useCreateTweet, useGetAllTweets } from "@/hooks/tweet"
+import { Tweet } from "@/gql/graphql"
 
 interface TwitterSidebar {
   title: string,
@@ -65,7 +67,18 @@ const siderbarItems: TwitterSidebar[] = [
 export default function Home() {
 
   const { user } = useCurrentUser()
+  const { tweets = []} = useGetAllTweets()
+  const {mutate} = useCreateTweet()
   const queryClient = useQueryClient()
+
+  const [content , setContent ] = useState<string>('')
+
+  const handleSelectedImage = useCallback(()=>{
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.click()
+  },[])
 
 
   const handleLoginWithGoogle = useCallback(async (res: CredentialResponse) => {
@@ -85,6 +98,12 @@ export default function Home() {
     await queryClient.invalidateQueries(["current-user-details"])
   }
     , [])
+
+  const handleCreateTweet = useCallback(async () => {
+    if(!content) return toast.error('Content is required')
+    mutate({content})
+    setContent('')
+  },[content, mutate])
 
 
   return (
@@ -132,8 +151,52 @@ export default function Home() {
 
       </div>
 
-      <div className=' col-span-6 border-l-[1px] border-r-[1px] border-gray-500'>
-        {/* <FeedCard/> */}
+      <div className=' col-span-5 border-l-[1px] border-r-[1px] border-gray-600 h-screen overflow-scroll'>
+        <div>
+
+          <div className="border border-r-0 border-l-0 border-b-0 border-gray-600 p-5 hover:bg-slate-900 transition-all cursor-pointer">
+            <div className="grid grid-cols-12 gap-3">
+              <div className="col-span-1">
+                {user?.profileImageUrl &&
+                  <Image
+                    src={user?.profileImageUrl}
+                    alt="user-image"
+                    height={50}
+                    width={50}
+                    className="rounded-full"
+                  />}
+              </div>
+            </div>
+
+            <div className="col-span-11">
+              <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+                className="w-full bg-transparent text-xl p-3 border-b border-slate-700"
+                placeholder="What's happening"
+                rows={4}>
+              </textarea>
+
+              <div className="mt-2 flex justify-between items-center">
+                <BiImageAlt className="text-3xl " onClick={handleSelectedImage}/>
+                <button onClick={handleCreateTweet} className=" mt-4 group relative h-12 w-48 overflow-hidden  rounded-full bg-[#1d9bf0] text-lg font-bold text-white">
+                  Tweet
+                  <div className="absolute inset-0 h-full scale-0  transition-all duration-300 group-hover:scale-100 group-hover:bg-white/30"></div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div>
+          {
+            tweets?.map(
+              tweet => <FeedCard key={tweet?.id} data={tweet as Tweet} />
+            )
+          }
+        </div>
 
       </div>
 
