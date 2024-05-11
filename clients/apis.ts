@@ -5,7 +5,7 @@ const isClient = typeof window !== 'undefined';
 export const graphqlClient = new GraphQLClient("http://localhost:8000/graphql",
     {
         headers:()=>{
-            const token = localStorage.getItem('__twitter_token')
+            const token = isClient ? localStorage.getItem('__twitter_token') : null
             return {
                 Authorization: isClient ? `Bearer ${token}` : ''
             }
