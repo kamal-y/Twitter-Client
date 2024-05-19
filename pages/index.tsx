@@ -9,7 +9,8 @@ import { Tweet } from "@/gql/graphql"
 import { BiImageAlt } from "react-icons/bi"
 import { GetServerSideProps } from "next"
 import { graphqlClient } from "@/clients/apis"
-import { getAllTweetsQuery } from "@/graphql/query/tweet"
+import { getAllTweetsQuery, getSignedUrl } from "@/graphql/query/tweet"
+import axios from "axios"
 
 interface HomeProps {
   tweets?: Tweet[]
@@ -18,26 +19,71 @@ interface HomeProps {
 
 export default function Home(props : HomeProps) {
 
-  // const { tweets = [] } = useGetAllTweets()
+  const { tweets = props.tweets as Tweet[] } = useGetAllTweets()
   const { mutate } = useCreateTweet()
   const { user } = useCurrentUser()
 
   const [content, setContent] = useState<string>('')
+  const [imageURL , setImageURL] = useState('')
+
+  const hadleInputChangeFile = useCallback((input: HTMLInputElement)=>{
+      return async (event : Event) => {
+        event.preventDefault();
+        const file : File | null | undefined = input.files?.item(0)
+
+        if(!file) return;
+
+        console.log("file->",file);
+
+        const {getSignedUrlForTweet} = await graphqlClient.request(getSignedUrl,{
+          imageName:file.name,
+          imageType:file.type.split('/')[1]
+        })
+
+        console.log(getSignedUrlForTweet);
+
+        if(getSignedUrlForTweet){
+          toast.loading("Uploading..." , {id:"getSignedUrlForTweet"})
+          try {
+            await axios.put(getSignedUrlForTweet, file,{
+              headers : {
+                "Content-Type":file.type
+              }
+            })
+          } catch (error) {
+            throw new Error("error in axios")
+          }
+          toast.success("Upload Completed" , {id:"getSignedUrlForTweet"})
+          const url = new URL(getSignedUrlForTweet)
+          const myFilePath = `${url.origin}${url.pathname}`
+          setImageURL(myFilePath)
+        }
+      }
+  }, [])
 
   const handleSelectedImage = useCallback(() => {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = 'image/*'
+
+    const handlerFunction = hadleInputChangeFile(input)
+
+    input.addEventListener("change", handlerFunction)
+
     input.click()
-  }, [])
+  }, [hadleInputChangeFile])
 
 
 
   const handleCreateTweet = useCallback(async () => {
     if (!content) return toast.error('Content is required')
-    mutate({ content })
+    mutate({ 
+      content,
+      imageURL
+           })
     setContent('')
-  }, [content, mutate])
+    setImageURL('')
+  }, [content, mutate , imageURL])
 
 
   return (
@@ -67,6 +113,9 @@ export default function Home(props : HomeProps) {
                 placeholder="What's happening"
                 rows={4}>
               </textarea>
+              {
+                imageURL && <Image src={imageURL} alt="tweet-image" width={300} height={300}></Image>
+              }
 
               <div className="mt-2 flex justify-between items-center">
                 <BiImageAlt className="text-3xl " onClick={handleSelectedImage} />
@@ -83,7 +132,7 @@ export default function Home(props : HomeProps) {
 
         <div>
           {
-            props.tweets?.map(
+            tweets?.map(
               tweet => <FeedCard key={tweet?.id} data={tweet as Tweet} />
             )
           }
@@ -96,7 +145,6 @@ export default function Home(props : HomeProps) {
 export const getServerSideProps : GetServerSideProps <HomeProps>= async( context ) =>{
 
   const allTweets = await graphqlClient.request(getAllTweetsQuery)
-
  return{
   props:{
     tweets : allTweets.getAllTweets as Tweet[]

@@ -123,20 +123,20 @@ export const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
 
                     <div className="mt-4">
                         <ul>
-                            
-                                {
-                                    sidebarItems.map((item) => (
-                                        <li key={item.title}>
-                                            <Link
-                                                className="flex justify-start items-center gap-4 hover:bg-gray-800 rounded-full px-3 py-3 w-fit cursor-pointer mt-2"
-                                                href={item.link}
-                                            >
-                                                <span className=" text-3xl">{item.icon}</span>
-                                                <span className="hidden sm:inline">{item.title}</span>
-                                            </Link>
-                                        </li>
-                                    ))
-                                }
+
+                            {
+                                sidebarItems.map((item) => (
+                                    <li key={item.title}>
+                                        <Link
+                                            className="flex justify-start items-center gap-4 hover:bg-gray-800 rounded-full px-3 py-3 w-fit cursor-pointer mt-2"
+                                            href={item.link}
+                                        >
+                                            <span className=" text-3xl">{item.icon}</span>
+                                            <span className="hidden sm:inline">{item.title}</span>
+                                        </Link>
+                                    </li>
+                                ))
+                            }
                         </ul>
                     </div>
 
@@ -168,11 +168,42 @@ export const TwitterLayout: React.FC<TwitterLayoutProps> = (props) => {
                 <div className=' col-span-3'>
 
                     {
-                        !user &&
-                        <div className="p-5 bg-slate-700 rounded-lg">
-                            <h1 className="my-2 text-2xl">New to Twitter?</h1>
-                            <GoogleLogin onSuccess={handleLoginWithGoogle} />
-                        </div>
+                        !user ?
+                            (<div className="p-5 bg-slate-700 rounded-lg">
+                                <h1 className="my-2 text-2xl">New to Twitter?</h1>
+                                <GoogleLogin onSuccess={handleLoginWithGoogle} />
+                            </div>) :
+                            (
+                                <div className="px-4 py-3 bg-slate-800 rounded-lg">
+                                    <h1 className="my-2 text-2xl mb-5">Users you may know</h1>
+                                    {
+                                        user.recommendedUsers?.map((el) => (
+                                            <div className="flex items-center gap-3 mt-2" key={el?.id}>
+                                                {el?.profileImageUrl && (
+                                                    <Image
+                                                        src={el?.profileImageUrl}
+                                                        alt="user-image"
+                                                        className="rounded-full"
+                                                        width={60}
+                                                        height={60}
+                                                    />
+                                                )}
+                                                <div>
+                                                    <div className="text-lg">
+                                                        {el?.firstName} {el?.lastName}
+                                                    </div>
+                                                    <Link
+                                                        href={`/${el?.id}`}
+                                                        className="bg-white text-black text-sm px-5 py-1 w-full rounded-lg"
+                                                    >
+                                                        View
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        ))
+                                    }
+                                </div>
+                            )
                     }
 
                 </div>
