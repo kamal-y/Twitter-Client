@@ -1,12 +1,5 @@
 import React, { useCallback } from 'react'
-import Image from 'next/image';
 import { useCurrentUser } from '@/hooks/user';
-import toast from 'react-hot-toast';
-import { graphqlClient } from '@/clients/apis';
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import Link from 'next/link';
-import { verifyUserGoogleTokenQuery } from '@/graphql/query/user';
-import { useQueryClient } from '@tanstack/react-query';
 import Avatar from '../Avatar';
 
 
@@ -31,7 +24,7 @@ const FollowBar = () => {
                                             <Avatar userId={user?.id} imageURL={user?.profileImageUrl} />
                                             <div className="flex flex-col">
                                                 <p className="text-sm font-semibold text-white">{user?.firstName} {user.lastName}</p>
-                                                {/* <p className="text-sm text-neutral-400">@\</p> */}
+                                                <p className="text-sm text-neutral-400">@</p>
                                             </div>
                                         </div>
                                     }</>

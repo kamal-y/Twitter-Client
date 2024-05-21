@@ -67,6 +67,7 @@ export const getCurrentUserById = graphql(`#graphql
     tweets {
       id
       content
+      imageURL
       author {
           id
           firstName

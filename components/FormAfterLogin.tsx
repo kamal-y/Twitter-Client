@@ -84,6 +84,7 @@ const FormAfterLogin: React.FC = () => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="What's happening"
+          rows={4}
           className="
                       peer
                       mt-3
@@ -104,8 +105,6 @@ const FormAfterLogin: React.FC = () => {
           <Image src={imageURL} alt="tweet-image" width={300} height={300} />
         )}
 
-        <BiImageAlt className="text-xl" onClick={handleSelectedImage} />
-
         <hr
           className="
                   h-[1px]
@@ -116,7 +115,10 @@ const FormAfterLogin: React.FC = () => {
                   peer-focus:opacity-100
               "
         />
-        <div className="mt-4 flex flex-row justify-end">
+        <div className="mt-4 flex flex-row justify-between">
+
+          <BiImageAlt className="text-xl text-white" onClick={handleSelectedImage} />
+
           <Button
             onClick={handleCreateTweet}
 

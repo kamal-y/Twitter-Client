@@ -11,3 +11,9 @@ export const userUnFollowMutation = graphql(`#graphql
         unFollowUser(to: $to)
     }
 `)
+
+export const userDeleteTweetMutation = graphql(`#graphql
+    mutation DeleteTweetById($id: String) {
+        deleteTweetById(id: $id)
+    }
+`)

@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import React, { useCallback, useMemo } from "react";
-import { formatDistanceToNowStrict } from "date-fns";
 import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
-
+import Image from "next/image";
 import Avatar from "../Avatar";
 import { Tweet } from "@/gql/graphql";
+import DeleteItem from "./DeleteItem";
 
 interface PostItemProps {
   post: Tweet ,
@@ -66,6 +66,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, userId }) => {
           >
             {post?.content}
           </div>
+          {post.imageURL && 
+            <Image src={post.imageURL} alt="image" width={400} height={400} />
+          }
           <div className="mt-3 flex flex-row items-center gap-10">
             {/* COMMENTS */}
             <div
@@ -103,7 +106,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, userId }) => {
             {/* <EditItem post={post} /> */}
 
             {/* DELETE */}
-              {/* <DeleteItem post={post} userId={userId} /> */}
+              { userId &&
+                <DeleteItem post={post} userId={userId} />
+              }
           </div>
         </div>
       </div>

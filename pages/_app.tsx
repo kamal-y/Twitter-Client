@@ -4,6 +4,7 @@ import { Inter, Quicksand } from 'next/font/google'
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { Toaster } from 'react-hot-toast';
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
+import { TwitterLayout } from '@/components/TwitterLayout';
 
 const inter = Inter({ subsets: ["latin"] });
 const quickSand = Quicksand({ subsets: ["latin"] });
@@ -15,7 +16,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <div className={inter.className}>
       <QueryClientProvider client={queryClient}>
         <GoogleOAuthProvider clientId="852185220315-t1q68o5stn14r6dk1flhu4k61rn4bdiu.apps.googleusercontent.com" >
-          <Component {...pageProps} />
+          <TwitterLayout>
+            <Component {...pageProps} />
+          </TwitterLayout>
           <Toaster />
         </GoogleOAuthProvider>
       </QueryClientProvider>
