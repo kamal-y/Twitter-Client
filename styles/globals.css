@@ -40,3 +40,21 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Webkit browsers (Chrome, Safari) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px; /* Remove the scrollbar */
+  background: transparent; /* Optional: just to avoid the scrollbar from having a background */
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: none; /* Hide the scrollbar */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Optional: This ensures scrolling still works */
+.custom-scrollbar {
+  overflow-y: scroll; /* Ensure vertical scrolling is enabled */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}

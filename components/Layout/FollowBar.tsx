@@ -1,0 +1,47 @@
+import React, { useCallback } from 'react'
+import Image from 'next/image';
+import { useCurrentUser } from '@/hooks/user';
+import toast from 'react-hot-toast';
+import { graphqlClient } from '@/clients/apis';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import Link from 'next/link';
+import { verifyUserGoogleTokenQuery } from '@/graphql/query/user';
+import { useQueryClient } from '@tanstack/react-query';
+import Avatar from '../Avatar';
+
+
+const FollowBar = () => {
+    const { user } = useCurrentUser();
+
+
+
+
+
+    return (
+        <div>
+                < div className="hidden px-6 py-4 lg:block" >
+                    <div className="rounded-xl bg-neutral-800 p-4">
+                        <h2 className="text-xl font-semibold text-white">Whom to Follow?</h2>
+                        <div className="mt-4 flex flex-col gap-6">
+                            {user?.recommendedUsers?.map((user) => (
+                                <>
+                                    {
+                                        user?.id && user.profileImageUrl &&
+                                        <div key={user?.id} className="flex flex-row gap-4">
+                                            <Avatar userId={user?.id} imageURL={user?.profileImageUrl} />
+                                            <div className="flex flex-col">
+                                                <p className="text-sm font-semibold text-white">{user?.firstName} {user.lastName}</p>
+                                                {/* <p className="text-sm text-neutral-400">@\</p> */}
+                                            </div>
+                                        </div>
+                                    }</>
+                            ))}
+                        </div>
+                    </div>
+                </div >
+        </div>
+    )
+
+}
+export default FollowBar
+

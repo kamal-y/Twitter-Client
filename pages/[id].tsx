@@ -1,4 +1,4 @@
-import { TwitterLayout } from "@/components/Layout/TwitterLayout";
+import { TwitterLayout } from "@/components/TwitterLayout";
 import { useCurrentUser } from "@/hooks/user";
 import type { GetServerSideProps, NextPage } from "next";
 import { BsArrowLeftShort } from "react-icons/bs";
@@ -51,6 +51,9 @@ const UserProfilePage: NextPage<ServerProps> = (props) => {
                             <h1 className="text-2xl font-bold">
                                 {props.userInfo?.firstName} {props.userInfo?.lastName}
                             </h1>
+                            <h1 className="text-md font-bold text-slate-500">
+                                {props.userInfo?.tweets?.length} Tweets
+                            </h1>
                         </div>
                     </nav>
                 </div>
@@ -71,7 +74,7 @@ const UserProfilePage: NextPage<ServerProps> = (props) => {
                     {props.userInfo?.firstName} {props.userInfo?.lastName}
                 </h1>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <div className="flex gap-4 mt-2 text-sm text-gray-400">
                         <span>{props.userInfo?.follower?.length} Followers</span>
                         <span>{props.userInfo?.following?.length} Following</span>
