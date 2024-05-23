@@ -8,6 +8,7 @@ import { User } from "@/gql/graphql";
 import { graphqlClient } from "@/clients/apis";
 import { userFollowMutation, userUnFollowMutation } from "@/graphql/mutation/user";
 import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 interface UserProps {
   userInfo?: User
@@ -26,15 +27,34 @@ const EditOrFollowButton: React.FC<UserProps> = ({ userInfo }) => {
   }, [userInfo, currentUser?.following])
 
   const handleFollowUser = useCallback(async () => {
-    if (!userInfo?.id) return;
-    await graphqlClient.request(userFollowMutation, { to: userInfo?.id })
-    await queryClient.invalidateQueries(["current-user-details"])
-  }, [userInfo?.id, queryClient])
+    if (!userInfo?.id) {
+      toast.error("Please register");
+      return;
+    }
+
+    try {
+      await graphqlClient.request(userFollowMutation, { to: userInfo.id });
+      await queryClient.invalidateQueries(["current-user-details"]);
+      toast.success("Successfully followed the user!");
+    } catch (error) {
+      toast.error("Failed to follow the user. Please try again.");
+      console.error("Error following user:", error);
+    }
+  }, [userInfo?.id, queryClient]);
 
   const handleUnfollowUser = useCallback(async () => {
-    if (!userInfo?.id) return;
-    await graphqlClient.request(userUnFollowMutation, { to: userInfo?.id })
-    await queryClient.invalidateQueries(["current-user-details"])
+    if (!userInfo?.id) {
+      toast.error("please register");
+      return
+    }
+    try {
+      await graphqlClient.request(userUnFollowMutation, { to: userInfo.id });
+      await queryClient.invalidateQueries(["current-user-details"]);
+      toast.success("Successfully followed the user!");
+    } catch (error) {
+      toast.error("Failed to follow the user. Please try again.");
+      console.error("Error following user:", error);
+    }
   }, [userInfo?.id, queryClient])
 
 

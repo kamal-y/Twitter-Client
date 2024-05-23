@@ -14,7 +14,7 @@ interface HomeProps {
 
 
 export default function Home(props: HomeProps) {
-  const { tweets = props.tweets as Tweet[] } = useGetAllTweets();
+  const { tweets = props.tweets} = useGetAllTweets();
 
   return (
 

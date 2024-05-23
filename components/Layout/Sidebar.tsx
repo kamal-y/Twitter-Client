@@ -24,21 +24,6 @@ const SidebarWithSession = () => {
         href: '/'
       },
       {
-        label: 'Notifications',
-        icon: RiNotification4Line ,
-        href: '/'
-      },
-      {
-        label: 'Messages',
-        icon: BiMessageDetail ,
-        href: '/'
-      },
-      {
-        label: 'Bookmarks',
-        icon: BsBookmark ,
-        href: '/'
-      },
-      {
         label: 'Profile',
         icon: BsPerson ,
         href: `/${user?.id}`
@@ -73,21 +58,6 @@ const SidebarWithoutSession = () => {
       {
         label: 'Home',
         icon: BiSolidHomeCircle ,
-        href: '/'
-      },
-      {
-        label: 'Notifications',
-        icon: RiNotification4Line ,
-        href: '/'
-      },
-      {
-        label: 'Messages',
-        icon: BiMessageDetail ,
-        href: '/'
-      },
-      {
-        label: 'Bookmarks',
-        icon: BsBookmark ,
         href: '/'
       },
       {

@@ -16,8 +16,6 @@ interface ServerProps {
 
 const UserProfilePage: NextPage<ServerProps> = ({userInfo}) => {
 
-    console.log(userInfo?.tweets);
-
     return (
         <>
           {

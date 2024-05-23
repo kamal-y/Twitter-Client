@@ -1,5 +1,5 @@
 import { graphqlClient } from "@/clients/apis"
-import { CreateTweetData } from "@/gql/graphql"
+import { CreateTweetData, Tweet } from "@/gql/graphql"
 import { createTweetMutation } from "@/graphql/mutation/tweet"
 import { userDeleteTweetMutation } from "@/graphql/mutation/user"
 import { getAllTweetsQuery } from "@/graphql/query/tweet"
@@ -41,9 +41,9 @@ export const useGetAllTweets = () => {
 
     const query = useQuery({
         queryKey: ["all-tweets"],
-        queryFn: () => graphqlClient.request(getAllTweetsQuery)
+        queryFn: async () => graphqlClient.request(getAllTweetsQuery)
     })
 
-    return { ...query, tweets: query.data?.getAllTweets }
+    return { ...query, tweets: query.data?.getAllTweets as Tweet[]}
 
 }  
