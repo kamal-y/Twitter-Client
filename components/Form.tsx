@@ -30,7 +30,7 @@ const Form: React.FC= () => {
     if (verifyGoogleToken) window.localStorage.setItem("__twitter_token", verifyGoogleToken);
 
     await queryClient.invalidateQueries(["current-user-details"]);
-}, []);
+}, [queryClient]);
 
   return (
     <div className="border-b-[1px] border-neutral-500 px-5 py-2">

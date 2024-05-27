@@ -1,7 +1,6 @@
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import React, { useCallback, useState } from "react";
-
 import Avatar from "./Avatar";
 import Button from "./Button";
 import { useCurrentUser } from "@/hooks/user";

@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useGetAllTweets } from "@/hooks/tweet";
 import { Tweet } from "@/gql/graphql";
 import { GetServerSideProps } from "next";
 import { graphqlClient } from "@/clients/apis";
 import { getAllTweetsQuery, getSignedUrl } from "@/graphql/query/tweet";
 import Header from "@/components/Header";
-import Form from "@/components/Form";
 import PostFeed from "@/components/posts/PostFeed";
+import Form from "@/components/Form";
 
 interface HomeProps {
   tweets?: Tweet[]
@@ -14,7 +14,7 @@ interface HomeProps {
 
 
 export default function Home(props: HomeProps) {
-  const { tweets = props.tweets} = useGetAllTweets();
+  const { tweets = props.tweets } = useGetAllTweets();
 
   return (
 

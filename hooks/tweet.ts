@@ -3,7 +3,7 @@ import { CreateTweetData, Tweet } from "@/gql/graphql"
 import { createTweetMutation } from "@/graphql/mutation/tweet"
 import { userDeleteTweetMutation } from "@/graphql/mutation/user"
 import { getAllTweetsQuery } from "@/graphql/query/tweet"
-import { UseMutationResult, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import toast from "react-hot-toast"
 
 export const useCreateTweet = () => {
@@ -41,7 +41,7 @@ export const useGetAllTweets = () => {
 
     const query = useQuery({
         queryKey: ["all-tweets"],
-        queryFn: async () => graphqlClient.request(getAllTweetsQuery)
+        queryFn: () => graphqlClient.request(getAllTweetsQuery)
     })
 
     return { ...query, tweets: query.data?.getAllTweets as Tweet[]}

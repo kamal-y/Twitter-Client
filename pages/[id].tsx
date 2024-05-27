@@ -1,10 +1,7 @@
-import { useCurrentUser } from "@/hooks/user";
 import type { GetServerSideProps, NextPage } from "next";
 import { Tweet, User } from "@/gql/graphql";
-import { useRouter } from "next/router";
 import { graphqlClient } from "@/clients/apis";
 import { getCurrentUserById } from "@/graphql/query/user";
-import { useQueryClient } from "@tanstack/react-query";
 import UserBio from "@/components/users/UserBio";
 import UserHero from "@/components/users/UserHero";
 import PostFeed from "@/components/posts/PostFeed";

@@ -1,6 +1,4 @@
-import { graphqlClient } from '@/clients/apis'
 import { Tweet } from '@/gql/graphql'
-import { userDeleteTweetMutation } from '@/graphql/mutation/user'
 import { useDeleteTweet } from '@/hooks/tweet'
 import { useCurrentUser } from '@/hooks/user'
 import { QueryClient } from '@tanstack/react-query'
